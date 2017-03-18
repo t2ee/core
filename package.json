@@ -1,0 +1,24 @@
+{
+  "name": "@t2ee/core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "reflect-metadata": "^0.1.10",
+    "tslint": "^4.5.1",
+    "tslint-eslint-rules": "^3.4.0",
+    "typescript": "^2.2.1"
+  },
+  "dependencies": {
+    "@types/callsite": "^1.0.30",
+    "@types/node": "^7.0.8",
+    "callsite": "^1.0.0"
+  }
+}
+
