@@ -18,7 +18,6 @@ function AutoWiredDecorator(config?: Config): (target: any, key?: string, index?
     };
 
     return (target: any, key?: string, index?: number): any => {
-    //console.log(target, target.prototype, key, index, )
         // tslint:disable-next-line strict-type-predicates
         const isParameter: boolean = index !== undefined;
         // tslint:disable-next-line strict-type-predicates
