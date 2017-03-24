@@ -88,6 +88,7 @@ class Container {
             const instance: any = new target(...params);
 
             const lazyProperty: {[key: string]: Meta} = {};
+
             for (const key in property) {
                 const p: Meta = property[key];
                 if (!p.lazy) {
