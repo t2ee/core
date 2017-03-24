@@ -1,3 +1,6 @@
+// tslint:disable-next-line
+import 'source-map-support/register';
+
 import ClassConstructor from './ClassConstructor';
 import AutoScan from './injections/AutoScan';
 import AutoWired from './injections/AutoWired';
