@@ -30,4 +30,8 @@ export default class Class<T> {
 
         return new Class<T>(klass, className);
     }
+
+    public static fromPrototype<T>(klass: ClassConstructor<T>, name: string): Class<T> {
+        return new Class<T>(klass, name);
+    }
 }
