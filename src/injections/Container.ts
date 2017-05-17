@@ -1,115 +1,155 @@
-import Metadata from '../utils/Metadata';
 import ClassConstructor from '../ClassConstructor';
 import Provider from './Provider';
-import { Meta } from './AutoWired';
-export type Scope = void;
+import AutoWireMeta from './AutoWireMeta';
+import ComponentMeta from './ComponentMeta';
+import Scope from '../scopes/Scope';
 
-class ClassProxy<T> implements ProxyHandler<T> {
-    private initedProperty: {[key: string]: any} = {};
+class ClassProxy<T extends Object> implements ProxyHandler<T> {
 
     public constructor(
-        private lazyProperty: {[key: string]: Meta},
-        private parameters: {[method: string]: {[index: number]: Meta}},
-        private provider: Provider,
+        private parameters: {[key: string]: {[index: number]: AutoWireMeta}},
+        private data: any,
     ) {
     }
 
     public get(target: T, key: PropertyKey, receiver: any): any {
-        if (key in this.parameters) {
-            const metas: {[index: number]: Meta} = this.parameters[key];
+        if (key in this.parameters) { // this is a function
+            const metas: {[index: number]: AutoWireMeta} = this.parameters[key];
             const method: Function = target[key];
-            const provider: Provider = this.provider;
+            const passInData: any = this.data;
 
             return function (...params: any[]): any {
                 for (const index in metas) {
-                    const p: Meta = metas[index];
-                    if (p.resolve) {
-                        params[parseInt(index)] = p.resolve(p.klass, p.meta);
-                    } else {
-                        params[parseInt(index)] = Container.get(p.klass, provider);
-                        if (params[parseInt(index)] === undefined) {
-                            params[parseInt(index)]  = provider.get<any>(p);
-                        }
-                    }
+                    const wire: AutoWireMeta = metas[index];
+                    params[index] = Container.get(wire.type, wire.declaredType, wire.data, passInData);
                 }
 
                 return method.apply(this, params);
             };
-        }
-        if (key in this.lazyProperty) {
-            if (!(key in this.initedProperty)) {
-                const p: Meta = this.initedProperty[key];
-                if (p.resolve) {
-                    this.initedProperty[key] = p.resolve(p.klass, p.meta);
-                } else {
-                    this.initedProperty[key] = Container.get(p.klass, this.provider);
-                }
-            }
-
-            return this.initedProperty[key];
         }
 
         return target[key];
     }
 }
 
-export class DefaultConatinerProvider implements Provider {
-    public get<T>(config: Meta): T {
-        return Container.get(config.klass, this);
-    }
-}
-
-interface Resolver<T> {
-    scope: Scope;
-    target: ClassConstructor<T>;
-}
-
 class Container {
-    private static injectables: Map<ClassConstructor<any>, Resolver<any>> =
-        new Map<ClassConstructor<any>, Resolver<any>>();
-    public static DefaultProvider: Provider = new DefaultConatinerProvider();
+    private static components:
+        Map<string | Symbol | ClassConstructor<any>, {providers: Set<Provider>, meta: ComponentMeta}> =
+        new Map<string | Symbol | ClassConstructor<any>, {providers: Set<Provider>, meta: ComponentMeta}>();
+    private static providers: Map<string | Symbol | ClassConstructor<any>, Set<Provider>> =
+        new Map<string | Symbol | ClassConstructor<any>, Set<Provider>>();
 
-    public static get<T>(klass: ClassConstructor<T>, provider: Provider, ...params: any[]): T {
-        params = params || [];
-        if (Container.injectables.has(klass)) {
-            const {
-                target,
-                //scope,
-            }: Resolver<any> = Container.injectables.get(klass);
+    public static get<T>(
+        type: ClassConstructor<T> | Symbol | string,
+        declaredType: ClassConstructor<T>,
+        data?: any,
+        ...params: any[],
+    ): T;
+    public static get<T>(
+        type: ClassConstructor<T> | Symbol | string,
+        data?: any,
+        ...params: any[],
+    ): T;
+    public static get<T>(
+        type: ClassConstructor<T> | Symbol | string,
+        declaredTypeOrData: ClassConstructor<T> | any,
+        dataOrParam?: any,
+        ...params: any[],
+    ): T {
+        const item: {providers: Set<Provider>, meta: ComponentMeta} = Container.components.get(type);
+        let declaredType: ClassConstructor<any> = null;
+        let data: any = null;
 
-            const args: {[key: string]: Meta} = Metadata.get('c3po:wires:argument', target.prototype) || {};
-            const parameters: {[key: string]: {[index: number]: Meta }} =
-                Metadata.get('c3po:wires:parameter', target.prototype) || {};
-            const property: Meta[] = Metadata.get('c3po:wires:property', target.prototype) || [];
+        if (typeof declaredTypeOrData === 'function') {
+            declaredType = declaredTypeOrData;
+            data = dataOrParam;
+        } else {
+            data = declaredTypeOrData;
+            params.unshift(dataOrParam);
+        }
 
-            for (const index in args) {
-                params[parseInt(index)] = Container.get(args[index].klass, provider);
+        let meta: ComponentMeta = null;
+        let providers: Set<Provider> = new Set<Provider>();
+        let scopes: Scope[] = [];
+
+        if (item) {
+            meta = item.meta;
+            providers = item.providers;
+            scopes = item.meta.scope;
+        }
+
+        let instance: T = null;
+
+        if (Container.providers.get(type)) {
+            for (const provider of Container.providers.get(type)) {
+                providers.add(provider);
             }
-            const instance: any = new target(...params);
+        }
 
-            const lazyProperty: {[key: string]: Meta} = {};
+        if (!providers) {
+            throw new Error(`${(type as Function).name || type.toString()} is not a Component`);
+        }
 
-            for (const key in property) {
-                const p: Meta = property[key];
-                if (!p.lazy) {
-                    if (p.resolve) {
-                        instance[key] = p.resolve(p.klass, p.meta);
-                    } else {
-                        instance[key] = provider.get<any>(p);
-                    }
-                } else {
-                    lazyProperty[key] = p;
+        if (meta) {
+            for (const index in meta.argument) {
+                const wire: AutoWireMeta = meta.argument[index];
+                params[index] = Container.get(wire.type, wire.declaredType, wire.data, data);
+            }
+        }
+
+
+        if (scopes.length) {
+            for (const scope of scopes) {
+                instance = scope.handle(instance, Array.from(providers), {type, data, declaredType}, params);
+                if (scope.shouldBreak()) {
+                    break;
+                }
+            }
+        } else {
+            for (const provider of providers) {
+                instance = provider.resolve(instance, { type, data, declaredType }, params);
+            }
+        }
+
+        if (meta) {
+            for (const key in meta.property) {
+                const wire: AutoWireMeta = meta.property[key];
+                instance[key] = Container.get(wire.type, wire.declaredType, wire.data, data);
+                if (instance[key] === null) {
+                    instance[key] = Container.get(key, wire.declaredType, wire.data, data);
                 }
             }
 
-            return new Proxy<T>(instance, new ClassProxy<T>(lazyProperty, parameters, provider));
+            if (instance === null) {
+                return null;
+            }
+
+            return new Proxy<T>(instance, new ClassProxy<T>(meta.parameter, data));
         } else {
-            return undefined;
+            return instance;
         }
     }
 
-    public static provide<P, T extends P>(target: ClassConstructor<T>, type: ClassConstructor<P>, scope?: Scope): void {
-        Container.injectables.set(type, { target, scope });
+    public static inject(
+        type: string | Symbol | ClassConstructor<any>,
+        provider: Provider,
+        meta?: ComponentMeta,
+    ): void {
+        if (meta) {
+            let item: {providers: Set<Provider>, meta: ComponentMeta}  = Container.components.get(type);
+            if (!item) {
+                item = {
+                    providers: new Set<Provider>(),
+                    meta,
+                };
+            }
+            item.providers.add(provider);
+            Container.components.set(type, item);
+        } else {
+            const providers: Set<Provider> = Container.providers.get(type) || new Set<Provider>();
+            providers.add(provider);
+            Container.providers.set(type, providers);
+        }
     }
 
 }

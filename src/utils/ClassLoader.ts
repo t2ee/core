@@ -43,11 +43,6 @@ export class ClassLoader {
 
     public static getClass<T>(moduleName: string, className?: string): Class<T> {
         if (ClassLoader.files.indexOf(moduleName) !== -1) {
-            const m: any = require(moduleName);
-            if (className && m[className] === undefined) {
-                return null;
-            }
-
             return Class.forName<T>(moduleName, className);
         }
 

@@ -26,9 +26,16 @@ export default class Class<T> {
         let klass: any = m;
         if (className) {
             klass = m[className];
+        } else {
+            klass = m.default;
         }
 
-        return new Class<T>(klass, className);
+        let name: string = moduleName;
+        if (className) {
+            name = moduleName + '@' + className;
+        }
+
+        return new Class<T>(klass, name);
     }
 
     public static fromPrototype<T>(klass: ClassConstructor<T>, name: string): Class<T> {

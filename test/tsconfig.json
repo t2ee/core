@@ -1,15 +1,14 @@
 {
     "compilerOptions": {
         "module": "commonjs",
-        "outDir": "./dist",
+        "outDir": "../test/dist",
         "target": "ES6",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-		"declaration": true,
         "sourceMap": true
     },
     "compileOnSave": false,
     "include": [
-        "./src/**/*.ts"
+        "./**/*.ts"
     ]
 }

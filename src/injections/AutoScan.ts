@@ -17,22 +17,26 @@ function walk(dir: string): string[] {
     return result;
 }
 
-// tslint:disable-next-line no-empty-interface
-export interface Config {
-}
 
-function AutoScanDecorator(config?: Config): (target: any) => any {
-    config = config || {};
+function AutoScanDecorator(directories?: string[]): (target: any) => any {
 
     return (target: any): any => {
-        const directory: string = MiscUtil.getCallerDirectory();
-        const location: string = path.dirname(directory);
-        console.log(location);
-        let files: string[] = walk(location);
-        files.splice(files.indexOf(directory), 1);
-        files = files.filter((file: string) => path.extname(file) === '.js');
-        for (const file of files) {
-            require(file);
+        const locations: string[] = [];
+
+        if (directories.length) {
+            locations.push(...directories);
+        } else {
+            const directory: string = MiscUtil.getCallerDirectory();
+            locations.push(path.dirname(directory));
+        }
+
+        for (const location of locations) {
+            let files: string[] = walk(location);
+            files.splice(files.indexOf(location), 1);
+            files = files.filter((file: string) => path.extname(file) === '.js');
+            for (const file of files) {
+                require(file);
+            }
         }
 
         return target;
@@ -40,10 +44,10 @@ function AutoScanDecorator(config?: Config): (target: any) => any {
 }
 
 function AutoScan(target: any): any;
-function AutoScan(config?: Config): ClassDecorator;
-function AutoScan(target?: Config | any): ClassDecorator | any {
+function AutoScan(...paths: string[]): ClassDecorator;
+function AutoScan(target?: string[] | string | any): ClassDecorator | any {
     if (target instanceof Function) { // used directly
-        AutoScanDecorator()(target);
+        AutoScanDecorator([])(target);
     } else {  // used as function call
         return AutoScanDecorator(target);
     }

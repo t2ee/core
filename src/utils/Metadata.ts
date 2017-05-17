@@ -7,11 +7,11 @@ export interface BuiltIn {
 class Metadata {
     private constructor() {}
 
-    public static set(metaKey: string, metaValue: any, target: any, key?: string | symbol): void {
+    public static set(metaKey: string | Symbol, metaValue: any, target: any, key?: string | symbol): void {
         (Reflect as any).defineMetadata(metaKey, metaValue, target, key);
     }
 
-    public static get(metaKey: string, target: any, key?: string | symbol): any  {
+    public static get(metaKey: string | Symbol, target: any, key?: string | symbol): any  {
         return (Reflect as any).getMetadata(metaKey, target, key);
     }
 

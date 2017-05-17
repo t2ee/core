@@ -1,9 +1,7 @@
-import {
-    Meta,
-} from './AutoWired';
+import AutoWireMeta from './AutoWireMeta';
 
 interface Provider {
-    get<T>(config: Meta): T;
+    resolve<T>(value: T, meta: AutoWireMeta, args: any[]): T;
 }
 
 export default Provider;
