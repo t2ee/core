@@ -1,26 +1,46 @@
 {
   "name": "@t2ee/core",
-  "version": "0.1.0",
-  "description": "",
+  "version": "0.1.1",
+  "description": "## Auto Configuration",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsc -p src/tsconfig.json"
   },
-  "author": "",
+  "author": "Qiaosen Huang",
   "license": "MIT",
   "devDependencies": {
     "reflect-metadata": "^0.1.10",
-    "typescript": "^2.2.1"
-  },
-  "dependencies": {
-    "@types/callsite": "^1.0.30",
+    "source-map-support": "^0.4.15",
+    "typescript": "^2.4.2",
+	"@types/callsite": "^1.0.30",
     "@types/js-yaml": "^3.5.29",
     "@types/lodash": "^4.14.62",
-    "@types/node": "^7.0.8",
+    "@types/node": "^7.0.8"
+  },
+  "dependencies": {
     "callsite": "^1.0.0",
     "js-yaml": "^3.8.3",
     "lodash": "^4.17.4",
     "source-map-support": "^0.4.14"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/t2ee/core.git"
+  },
+  "keywords": [
+    "t2ee",
+    "core",
+    "injection",
+    "dependency",
+    "di",
+    "spring"
+  ],
+  "bugs": {
+    "url": "https://github.com/t2ee/core/issues"
+  },
+  "homepage": "https://github.com/t2ee/core#readme"
 }
