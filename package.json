@@ -1,6 +1,6 @@
 {
   "name": "@t2ee/core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "## Auto Configuration",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -13,13 +13,13 @@
   "devDependencies": {
     "reflect-metadata": "^0.1.10",
     "source-map-support": "^0.4.15",
-    "typescript": "^2.4.2",
+    "typescript": "^2.4.2"
+  },
+  "dependencies": {
 	"@types/callsite": "^1.0.30",
     "@types/js-yaml": "^3.5.29",
     "@types/lodash": "^4.14.62",
-    "@types/node": "^7.0.8"
-  },
-  "dependencies": {
+    "@types/node": "^7.0.8",
     "callsite": "^1.0.0",
     "js-yaml": "^3.8.3",
     "lodash": "^4.17.4",

@@ -71,6 +71,31 @@ const main = Container.get(Main);
 main.test();
 ```
 
+### Provide Dynamic Usage in configuration file
+
+> this allows developers to provide custom variables to be used in configuration files
+
+`example.yaml`
+```yaml
+level: LogLevel.DEBUG
+random_value: random(100)
+```
+
+`index.ts`
+```typescript
+import {
+    ConfigurationStore,
+} from '@t2ee/core';
+
+enum LogLevel {
+    DEBUG,
+    ERROR,
+}
+
+ConfigurationStore.provide('LogLevel', LogLevel);
+ConfigurationStore.provide('random', () => Math.ceil(Math.random() * 100));
+```
+
 ### Bean Configuration
 
 ```typescript
@@ -128,5 +153,4 @@ class Main {
 
 const main = Container.get(Main);
 ```
-
 

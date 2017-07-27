@@ -39,18 +39,18 @@ class Container {
     private static providers: Map<string | Symbol | ClassConstructor<any>, Set<Provider>> =
         new Map<string | Symbol | ClassConstructor<any>, Set<Provider>>();
 
-    public static get<T>(
+    public static get<T extends Object>(
         type: ClassConstructor<T> | Symbol | string,
         declaredType: ClassConstructor<T>,
         data?: any,
         ...params: any[],
     ): T;
-    public static get<T>(
+    public static get<T extends Object>(
         type: ClassConstructor<T> | Symbol | string,
         data?: any,
         ...params: any[],
     ): T;
-    public static get<T>(
+    public static get<T extends Object>(
         type: ClassConstructor<T> | Symbol | string,
         declaredTypeOrData: ClassConstructor<T> | any,
         dataOrParam?: any,
