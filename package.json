@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
+	"prepublish": "npm run build",
     "build": "tsc -p src/tsconfig.json"
   },
   "author": "Qiaosen Huang",
