@@ -39,7 +39,7 @@ function AutoScanDecorator(directories?: string[]): (target: any) => any {
             }
         }
 
-        return target;
+        //return target;
     };
 }
 
@@ -47,7 +47,7 @@ function AutoScan(target: any): any;
 function AutoScan(...paths: string[]): ClassDecorator;
 function AutoScan(target?: string[] | string | any): ClassDecorator | any {
     if (target instanceof Function) { // used directly
-        AutoScanDecorator([])(target);
+        return AutoScanDecorator([])(target);
     } else {  // used as function call
         return AutoScanDecorator(target);
     }

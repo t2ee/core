@@ -47,6 +47,8 @@ function AutoWiredDecorator(name?: Symbol | string, data?: any):
             };
             Metadata.set('t2ee:core:autowire:property', wires, target);
         }
+
+        //return target;
     };
 }
 

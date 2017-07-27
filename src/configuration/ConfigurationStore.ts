@@ -7,21 +7,34 @@ export default class ConfigurationStore {
     private static store: Map<string, any> = new Map<string, any>();
     private static types: {[key: string]: any} = {};
 
-    public static loadFile(location: string): void {
-        let content: any = null;
+    private static readFile(location: string): any {
         if (fs.existsSync(`${location}.yaml`)) {
             const file: string = fs.readFileSync(`${location}.yaml`).toString();
-            content  = YAML.load(file);
+            return YAML.load(file);
         } else if (fs.existsSync(`${location}.yml`)) {
             const file: string = fs.readFileSync(`${location}.yml`).toString();
-            content  = YAML.load(file);
+            return YAML.load(file);
         } else if (fs.existsSync(`${location}.json`)) {
             const file: string = fs.readFileSync(`${location}.json`).toString();
-            content = JSON.parse(file);
+            return JSON.parse(file);
         } else if (fs.existsSync(`${location}.js`)) {
-            content = require(`${location}.js`);
+            return require(`${location}.js`);
         }
-        ConfigurationStore.load(path.basename(location), content);
+        return null;
+    }
+
+    public static loadFile(location: string, env?: string): void {
+        let content: any = ConfigurationStore.readFile(location);
+        if (content) {
+            ConfigurationStore.load(path.basename(location), content);
+        }
+
+        if (env) {
+            let content: any = ConfigurationStore.readFile(location + '.' + env);
+            if (content) {
+                ConfigurationStore.load(path.basename(location), content);
+            }
+        }
     }
 
     public static load(id: string, content: any): void {

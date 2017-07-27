@@ -6,6 +6,7 @@ function BeanDecorator(name?: string) {
         const beans: {[key: string]: ClassConstructor<any>} = Metadata.get('t2ee:core:beans', target) || {};
         beans[key] = name || Metadata.get(Metadata.builtIn.RETURN_TYPE, target, key);
         Metadata.set('t2ee:core:beans', beans, target);
+        return target;
     };
 }
 

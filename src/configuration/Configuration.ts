@@ -7,7 +7,7 @@ import Component from '../injections/Component';
 
 function Configuration(target: any): any {
     const beans: {[key: string]: ClassConstructor<any>} = Metadata.get('t2ee:core:beans', target.prototype) || {};
-    target = Component(target);
+    Component(target);
     const instance: any = Container.get(target);
 
     for (const key in beans) {

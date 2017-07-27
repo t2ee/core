@@ -37,7 +37,7 @@ function ComponentDecorator(config?: IConfig): ClassDecorator {
             },
         );
 
-        return target;
+        //return target;
     };
 }
 
