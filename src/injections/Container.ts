@@ -106,7 +106,7 @@ class Container {
         if (target && target.meta.property) {
             for (const key in (target.meta.property || {})) {
                 for (const wire of target.meta.property[key]) {
-                    instance[key] = Container.get(wire, instance[key]);
+                    instance[key] = Container.get(wire, instance[key], ...params);
                 }
             }
             return new Proxy<T>(instance, new ClassProxy<T>(target.meta.parameter, wire));
