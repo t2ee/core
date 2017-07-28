@@ -2,6 +2,7 @@ import ClassConstructor from '../ClassConstructor';
 import Provider from './Provider';
 import AutoWireMeta from './AutoWireMeta';
 import ComponentMeta from './ComponentMeta';
+import Metadata from '../utils/Metadata';
 import Scope from '../scopes/Scope';
 
 class ClassProxy<T extends Object> implements ProxyHandler<T> {
@@ -34,11 +35,10 @@ class ClassProxy<T extends Object> implements ProxyHandler<T> {
 }
 
 class Container {
-    private static components:
-        Map<string | Symbol | ClassConstructor<any>, {providers: Set<Provider>, meta: ComponentMeta}> =
-        new Map<string | Symbol | ClassConstructor<any>, {providers: Set<Provider>, meta: ComponentMeta}>();
-    private static providers: Map<string | Symbol | ClassConstructor<any>, Set<Provider>> =
-        new Map<string | Symbol | ClassConstructor<any>, Set<Provider>>();
+    private static components = new Map<string | Symbol | ClassConstructor<any>, {providers: Set<Provider>, meta: ComponentMeta}>();
+    private static providers = new Map<string | Symbol | ClassConstructor<any>, Set<Provider>>();
+    private static implementations = new Map<string | Symbol | ClassConstructor<any>, ClassConstructor<any>>();
+
 
     public static get<T extends Object>(wire: AutoWireMeta, defaultValue?: T, ...params: any[]): T;
     public static get<T extends Object>(identifier: ClassConstructor<T> | Symbol | string, defaultValue?: T, ...params: any[]): T;
@@ -52,18 +52,25 @@ class Container {
                 wire = {
                     type: identifierOrWire,
                     declaredType: identifierOrWire,
-                }
+                };
             } else {
                 wire = {
                     type: identifierOrWire as any,
                     declaredType: null,
-                }
+                };
             }
         } else {
             wire = identifierOrWire as AutoWireMeta;
             identifier = wire.type;
         }
 
+        if (Container.implementations.has(identifier)) {
+            identifier = Container.implementations.get(identifier);
+            wire = {
+                type: identifier,
+                declaredType: null,
+            };
+        }
 
         const target = Container.components.get(identifier);
         const providers = new Set<Provider>();
@@ -135,6 +142,18 @@ class Container {
             providers.add(provider);
             Container.providers.set(type, providers);
         }
+    }
+
+    public static extractMeta(target: ClassConstructor<any>): ComponentMeta {
+        return {
+            argument:  Metadata.get('t2ee:core:autowire:argument', target.prototype) || {},
+            parameter:  Metadata.get('t2ee:core:autowire:parameter', target.prototype) || {},
+            property:  Metadata.get('t2ee:core:autowire:property', target.prototype) || {},
+        }
+    }
+
+    public static provide<T>(type: string | Symbol | ClassConstructor<T>, implementation: ClassConstructor<T>): void {
+        Container.implementations.set(type, implementation);
     }
 
 }
