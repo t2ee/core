@@ -8,7 +8,7 @@ export class DefaultProvider implements Provider {
             return new meta.type(...args);
         }
 
-        return null;
+        return value;
     }
 }
 

@@ -7,21 +7,22 @@ import Scope from '../scopes/Scope';
 class ClassProxy<T extends Object> implements ProxyHandler<T> {
 
     public constructor(
-        private parameters: {[key: string]: {[index: number]: AutoWireMeta}},
-        private data: any,
+        private parameters: {[key: string]: {[index: number]: AutoWireMeta[]}},
+        private wire: AutoWireMeta,
     ) {
     }
 
     public get(target: T, key: PropertyKey, receiver: any): any {
         if (key in this.parameters) { // this is a function
-            const metas: {[index: number]: AutoWireMeta} = this.parameters[key];
+            const metas: {[index: number]: AutoWireMeta[]} = this.parameters[key];
             const method: Function = target[key];
-            const passInData: any = this.data;
+            const passInData: any = this.wire.data;
 
             return function (...params: any[]): any {
                 for (const index in metas) {
-                    const wire: AutoWireMeta = metas[index];
-                    params[index] = Container.get(wire.type, wire.declaredType, wire.data, passInData);
+                    for (const wire of metas[index]) {
+                        params[index] = Container.get(wire, params[index], passInData);
+                    }
                 }
 
                 return method.apply(this, params);
@@ -39,92 +40,76 @@ class Container {
     private static providers: Map<string | Symbol | ClassConstructor<any>, Set<Provider>> =
         new Map<string | Symbol | ClassConstructor<any>, Set<Provider>>();
 
-    public static get<T extends Object>(
-        type: ClassConstructor<T> | Symbol | string,
-        declaredType: ClassConstructor<T>,
-        data?: any,
-        ...params: any[],
-    ): T;
-    public static get<T extends Object>(
-        type: ClassConstructor<T> | Symbol | string,
-        data?: any,
-        ...params: any[],
-    ): T;
-    public static get<T extends Object>(
-        type: ClassConstructor<T> | Symbol | string,
-        declaredTypeOrData: ClassConstructor<T> | any,
-        dataOrParam?: any,
-        ...params: any[],
-    ): T {
-        const item: {providers: Set<Provider>, meta: ComponentMeta} = Container.components.get(type);
-        let declaredType: ClassConstructor<any> = null;
-        let data: any = null;
+    public static get<T extends Object>(wire: AutoWireMeta, defaultValue?: T, ...params: any[]): T;
+    public static get<T extends Object>(identifier: ClassConstructor<T> | Symbol | string, defaultValue?: T, ...params: any[]): T;
+    public static get<T extends Object>(identifierOrWire: AutoWireMeta | ClassConstructor<T> | Symbol | string, defaultValue?: T, ...params: any[]): T {
+        let identifier: ClassConstructor<T> | Symbol | string = null;
+        let wire: AutoWireMeta = null;
 
-        if (typeof declaredTypeOrData === 'function') {
-            declaredType = declaredTypeOrData;
-            data = dataOrParam;
+        if (~['function', 'symbol', 'string'].indexOf(typeof identifierOrWire)) { // identifier
+            identifier = identifierOrWire as any;
+            if (typeof identifierOrWire === 'function') {
+                wire = {
+                    type: identifierOrWire,
+                    declaredType: identifierOrWire,
+                }
+            } else {
+                wire = {
+                    type: identifierOrWire as any,
+                    declaredType: null,
+                }
+            }
         } else {
-            data = declaredTypeOrData;
-            params.unshift(dataOrParam);
+            wire = identifierOrWire as AutoWireMeta;
+            identifier = wire.type;
         }
 
-        let meta: ComponentMeta = null;
-        let providers: Set<Provider> = new Set<Provider>();
-        let scopes: Scope[] = [];
 
-        if (item) {
-            meta = item.meta;
-            providers = item.providers;
-            scopes = item.meta.scope;
-        }
+        const target = Container.components.get(identifier);
+        const providers = new Set<Provider>();
+        const scopes = new Set<Scope>();
 
-        let instance: T = null;
-
-        if (Container.providers.get(type)) {
-            for (const provider of Container.providers.get(type)) {
+        if (target && target.providers) {
+            for (const provider of target.providers) {
                 providers.add(provider);
             }
         }
 
-        if (!providers) {
-            throw new Error(`${(type as Function).name || type.toString()} is not a Component`);
+        for (const provider of (Container.providers.get(identifier) || [])) {
+            providers.add(provider);
         }
 
-        if (meta) {
-            for (const index in meta.argument) {
-                const wire: AutoWireMeta = meta.argument[index];
-                params[index] = Container.get(wire.type, wire.declaredType, wire.data, data);
+        let instance: T = defaultValue;
+        params = params || [];
+
+        if (target && target.meta) {
+            for (const index in (target.meta.argument || {})) {
+                for (const wire of target.meta.argument[index]) {
+                    params[index] = Container.get(wire, params[index]);
+                }
             }
         }
 
-
-        if (scopes.length) {
-            for (const scope of scopes) {
-                instance = scope.handle(instance, Array.from(providers), {type, data, declaredType}, params);
+        if (target && target.meta.scope && target.meta.scope.length) {
+            for (const scope of (target.meta.scope || [])) {
+                instance = scope.handle(instance, Array.from(providers), wire, params);
                 if (scope.shouldBreak()) {
                     break;
                 }
             }
         } else {
             for (const provider of providers) {
-                instance = provider.resolve(instance, { type, data, declaredType }, params);
+                instance = provider.resolve(instance, wire, params);
             }
         }
 
-        if (meta) {
-            for (const key in meta.property) {
-                const wire: AutoWireMeta = meta.property[key];
-                instance[key] = Container.get(wire.type, wire.declaredType, wire.data, data);
-                if (instance[key] === null) {
-                    instance[key] = Container.get(key, wire.declaredType, wire.data, data);
+        if (target && target.meta.property) {
+            for (const key in (target.meta.property || {})) {
+                for (const wire of target.meta.property[key]) {
+                    instance[key] = Container.get(wire, instance[key]);
                 }
             }
-
-            if (instance === null) {
-                return null;
-            }
-
-            return new Proxy<T>(instance, new ClassProxy<T>(meta.parameter, data));
+            return new Proxy<T>(instance, new ClassProxy<T>(target.meta.parameter, wire));
         } else {
             return instance;
         }

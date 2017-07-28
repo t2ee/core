@@ -12,11 +12,11 @@ function ComponentDecorator(config?: IConfig): ClassDecorator {
     config = config || {};
 
     return <TFunction extends Function>(target: TFunction): any => {
-        const argument: {[index: number]: AutoWireMeta} =
+        const argument: {[index: number]: AutoWireMeta[]} =
             Metadata.get('t2ee:core:autowire:argument', target.prototype) || {};
-        const parameter: {[key: string]: {[index: number]: AutoWireMeta}} =
+        const parameter: {[key: string]: {[index: number]: AutoWireMeta[]}} =
                         Metadata.get('t2ee:core:autowire:parameter', target.prototype) || {};
-        const property: {[key: string]: AutoWireMeta} =
+        const property: {[key: string]: AutoWireMeta[]} =
             Metadata.get('t2ee:core:autowire:property', target.prototype) || {};
 
         let scope = config.scope;

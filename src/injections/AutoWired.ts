@@ -14,37 +14,40 @@ function AutoWiredDecorator(name?: Symbol | string, data?: any):
             if (key === undefined) { // constructor parameter
                 const declaredType: ClassConstructor<AutoWireMeta> =
                     Metadata.get(Metadata.builtIn.PARAM_TYPE, target, key)[index];
-                const wires: {[index: number]: AutoWireMeta} =
+                const wires: {[index: number]: AutoWireMeta[]} =
                     Metadata.get('t2ee:core:autowire:argument', target.prototype) || {};
-                wires[index] = {
+                wires[index] = wires[index] || [];
+                wires[index].push({
                     type: name || declaredType,
                     declaredType,
                     data,
-                };
+                });
                 Metadata.set('t2ee:core:autowire:argument', wires, target.prototype);
             } else { // normal parameter
                 const declaredType: ClassConstructor<any> =
                     Metadata.get(Metadata.builtIn.PARAM_TYPE, target, key)[index];
-                const wires: {[key: string]: {[index: number]: AutoWireMeta}} =
+                const wires: {[key: string]: {[index: number]: AutoWireMeta[]}} =
                     Metadata.get('t2ee:core:autowire:parameter', target) || {};
 
                 wires[key] = wires[key] || {};
-                wires[key][index] = {
+                wires[key][index] = wires[key][index] || []
+                wires[key][index].push({
                     type: name || declaredType,
                     declaredType,
                     data,
-                };
+                });
                 Metadata.set('t2ee:core:autowire:parameter', wires, target);
             }
         } else { // property decorator
             const declaredType: ClassConstructor<any> = Metadata.get(Metadata.builtIn.TYPE, target, key);
-            const wires: {[key: string]: AutoWireMeta} =
+            const wires: {[key: string]: AutoWireMeta[]} =
                 Metadata.get('t2ee:core:autowire:property', target) || {};
-            wires[key] = {
+            wires[key] = wires[key] || [];
+            wires[key].push({
                 type: name || declaredType,
                 declaredType,
                 data,
-            };
+            });
             Metadata.set('t2ee:core:autowire:property', wires, target);
         }
 
