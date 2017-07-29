@@ -93,7 +93,7 @@ enum LogLevel {
 }
 
 ConfigurationStore.provide('LogLevel', LogLevel);
-ConfigurationStore.provide('random', () => Math.ceil(Math.random() * 100));
+ConfigurationStore.provide('random', (num) => Math.ceil(Math.random() * num));
 ```
 
 ### Bean Configuration
