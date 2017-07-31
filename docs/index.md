@@ -116,7 +116,7 @@ ConfigurationStore.provide('random', (value) => Math.ceil(Math.random() * value)
 ```typescript
 function Process(name: string) {
     return (target: Object, key: string) => {
-        AutoWired('process-information', { name });
+        return AutoWired('process-information', { name });
     };
 }
 ```
