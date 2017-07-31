@@ -14,7 +14,7 @@ export class ConfigurationProvider implements Provider {
             } else if (val === 'false' || val === false) {
                 val = false;
             } else {
-                throw new Error(`value '${val}' @ '${meta.data}' cannot be parsed as boolean`);
+                throw new Error(`value '${val}' @ '${meta.data[0]}' cannot be parsed as boolean`);
             }
         } else if (meta.declaredType === Date) {
             val = new Date(val);

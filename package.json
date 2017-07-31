@@ -1,22 +1,33 @@
 {
   "name": "@t2ee/core",
-  "version": "0.1.9",
-  "description": "## Auto Configuration",
+  "version": "0.1.10",
+  "description": "",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-	"prepublish": "npm run build",
-    "build": "tsc -p src/tsconfig.json"
+    "prepublish": "npm run build",
+    "build": "rm -rf dist && tsc -p src/tsconfig.json",
+    "build-test": "rm -rf test-dist/ && tsc -p src/tsconfig.test.json",
+    "test": "npm run build-test && ava test-dist/**/*.test.js",
+    "coverage": "npm run build-test && nyc ava -- test-dist/**/*.test.js"
   },
   "author": "Qiaosen Huang",
   "license": "MIT",
   "devDependencies": {
+    "ava": "^0.21.0",
+    "nyc": "^11.1.0",
     "reflect-metadata": "^0.1.10",
     "source-map-support": "^0.4.15",
     "typescript": "^2.4.2"
   },
+  "nyc": {
+      "reporter": [
+        "lcov",
+        "text-summary"
+      ]
+  },
   "dependencies": {
-	"@types/callsite": "^1.0.30",
+    "@types/callsite": "^1.0.30",
     "@types/js-yaml": "^3.5.29",
     "@types/lodash": "^4.14.62",
     "@types/node": "^7.0.8",

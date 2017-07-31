@@ -61,6 +61,7 @@ export default class ConfigurationStore {
                     return ConfigurationStore.getValue(obj, key, required);
                 }
             }
+            return null;
         }
     }
 
@@ -74,12 +75,25 @@ export default class ConfigurationStore {
         }
 
         let value: any = _.get(obj, key);
-        if (typeof value === 'string' && value.split('.')[0] in ConfigurationStore.types) {
-            const values: string[] = value.split('.');
-            const rest: string = values.slice(1).join('.');
-            value = _.get(ConfigurationStore.types[value[0]], rest);
+        if (typeof value === 'string') {
+            value = ConfigurationStore.parseValue(value);
         }
 
+        return value;
+    }
+
+    private static parseValue(value: string): any {
+        const regex = /([\w\_\$][\w\d\_|$]*)\((.*)\)/;
+        if (regex.test(value)) {
+            const [_, func, params] = value.match(regex);
+            if (func in ConfigurationStore.types) {
+                value = ConfigurationStore.types[func](...params.split(',').map(ConfigurationStore.parseValue));
+            }
+        } else if (value.split('.')[0] in ConfigurationStore.types) { // simple object
+            const values: string[] = value.split('.');
+            const rest: string = values.slice(1).join('.');
+            value = _.get(ConfigurationStore.types[values[0]], rest);
+        }
         return value;
     }
 
