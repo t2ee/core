@@ -11,5 +11,8 @@
     "compileOnSave": false,
     "include": [
         "./**/*.ts"
+    ],
+    "exclude": [
+        "./**/*.test.ts"
     ]
 }

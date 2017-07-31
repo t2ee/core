@@ -1,0 +1,5 @@
+str: hello
+num: '123'
+bool: true
+wrong_bool: yes
+date: 2017-07-31T08:36:54.325Z

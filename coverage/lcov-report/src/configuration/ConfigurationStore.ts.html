@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/configuration/ConfigurationStore.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">All files</a> / <a href="index.html">src/configuration</a> ConfigurationStore.ts
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">98.33% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>59/60</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">89.19% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>33/37</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>7/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">98.33% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>59/60</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106</td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import * as YAML from 'js-yaml';
+import * as _ from 'lodash';
+import * as fs from 'fs';
+import * as path from 'path';
+&nbsp;
+export default class ConfigurationStore {
+    private static store: Map&lt;string, any&gt; = new Map&lt;string, any&gt;();
+    private static types: {[key: string]: any} = {};
+&nbsp;
+    private static readFile(location: string): any {
+        if (fs.existsSync(`${location}.yaml`)) {
+            const file: string = fs.readFileSync(`${location}.yaml`).toString();
+            return YAML.load(file);
+        } else if (fs.existsSync(`${location}.yml`)) {
+            const file: string = fs.readFileSync(`${location}.yml`).toString();
+            return YAML.load(file);
+        } else if (fs.existsSync(`${location}.json`)) {
+            const file: string = fs.readFileSync(`${location}.json`).toString();
+            return JSON.parse(file);
+        } else if (fs.existsSync(`${location}.js`)) {
+            return require(`${location}.js`);
+        }
+        return null;
+    }
+&nbsp;
+    public static loadFile(location: string, env?: string): void {
+        let content: any = ConfigurationStore.readFile(location);
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (content) {
+            ConfigurationStore.load(path.basename(location), content);
+        }
+&nbsp;
+        if (env) {
+            let content: any = ConfigurationStore.readFile(location + '.' + env);
+            <span class="missing-if-branch" title="else path not taken" >E</span>if (content) {
+                ConfigurationStore.load(path.basename(location), content);
+            }
+        }
+    }
+&nbsp;
+    public static load(id: string, content: any): void {
+        let value: any = this.store.get(id) || {};
+        value = _.extend(value, content);
+        this.store.set(id, value);
+    }
+&nbsp;
+    public static get(key: string, id?: string, required: boolean = false): any {
+        if (id) {
+            const obj: any = ConfigurationStore.store.get(id);
+            if (!obj) {
+                throw new Error(`Configuration '${id}' is not laoded`);
+            }
+&nbsp;
+            return ConfigurationStore.getValue(obj, key, required);
+        } else {
+            for (const storeKey of ConfigurationStore.store.keys()) {
+                const obj: any = ConfigurationStore.store.get(storeKey);
+                <span class="missing-if-branch" title="if path not taken" >I</span>if (!obj) {
+<span class="cstat-no" title="statement not covered" >                    continue;</span>
+                }
+                if (_.has(obj, key)) {
+                    return ConfigurationStore.getValue(obj, key, required);
+                }
+            }
+            return null;
+        }
+    }
+&nbsp;
+    private static getValue(obj: any, key: string, required: boolean): any {
+        if (!_.has(obj, key)) {
+            if (required) {
+                throw new Error(`Value '${key}' is not found in any configuration.`);
+            } else {
+                return null;
+            }
+        }
+&nbsp;
+        let value: any = _.get(obj, key);
+        if (typeof value === 'string') {
+            value = ConfigurationStore.parseValue(value);
+        }
+&nbsp;
+        return value;
+    }
+&nbsp;
+    private static parseValue(value: string): any {
+        const regex = /([\w\_\$][\w\d\_|$]*)\((.*)\)/;
+        if (regex.test(value)) {
+            const [_, func, params] = value.match(regex);
+            <span class="missing-if-branch" title="else path not taken" >E</span>if (func in ConfigurationStore.types) {
+                value = ConfigurationStore.types[func](...params.split(',').map(ConfigurationStore.parseValue));
+            }
+        } else if (value.split('.')[0] in ConfigurationStore.types) { // simple object
+            const values: string[] = value.split('.');
+            const rest: string = values.slice(1).join('.');
+            value = _.get(ConfigurationStore.types[values[0]], rest);
+        }
+        return value;
+    }
+&nbsp;
+    public static provide(key: string, value: any): void {
+        ConfigurationStore.types[key] = value;
+    }
+&nbsp;
+}
+&nbsp;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Mon Jul 31 2017 16:54:53 GMT+0800 (CST)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>
