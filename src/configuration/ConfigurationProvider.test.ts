@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import test from 'ava';
 import Metadata from '../utils/Metadata';
 import ConfigurationStore from './ConfigurationStore';
-import ConfigurationProvider from './Configurationprovider';
+import ConfigurationProvider from './ConfigurationProvider';
 import * as path from 'path';
 
 
