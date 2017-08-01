@@ -11,8 +11,7 @@
 <img src="https://img.shields.io/coveralls/t2ee/core/master.svg?style=flat-square">
 </a>
 </p>
-[![build status][travis-image]][travis-url]
-[![Test coverage][coveralls-image]][coveralls-url]
+
 # Introduction
 
 This projects aims to be foundation component for the rest of [@t2ee](https://github.com/t2ee) projects. It provides dependency injection and auto configuration functionalities.
