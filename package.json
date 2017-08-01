@@ -1,7 +1,7 @@
 {
   "name": "@t2ee/core",
-  "version": "0.1.10",
-  "description": "",
+  "version": "0.1.11",
+  "description": "<p align=\"center\">     <a href=\"http://t2ee.org\">         <img width=\"200\" src=\"https://github.com/t2ee/core/raw/master/docs/t2ee.png\">     </a> </p> <p align=\"center\">     <a href=\"http://core.t2ee.org\">         <img width=\"200\" src=\"https://github.com/t2ee/core/raw/master/docs/core.png\">     </a> </p>",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
@@ -11,8 +11,8 @@
     "test": "npm run build-test && ava test-dist/**/*.test.js",
     "coverage": "npm run build-test && nyc ava -- test-dist/**/*.test.js"
   },
-  "author": "Qiaosen Huang",
-  "license": "MIT",
+  "author": "t2ee",
+  "license": "Apache-2.0",
   "devDependencies": {
     "ava": "^0.21.0",
     "nyc": "^11.1.0",
@@ -37,7 +37,7 @@
     "source-map-support": "^0.4.14"
   },
   "directories": {
-    "test": "test"
+    "doc": "docs"
   },
   "repository": {
     "type": "git",
