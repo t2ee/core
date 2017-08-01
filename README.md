@@ -1,5 +1,5 @@
-![](https://github.com/t2ee/core/raw/master/docs/t2ee.png)
-![](https://github.com/t2ee/core/raw/master/docs/core.png)
+<p align="center"><a href="https://t2ee.org"><img width="200" src="https://github.com/t2ee/core/raw/master/docs/t2ee.png"></a></p>
+<p align="center"><a href="https://t2ee.org"><img width="200" src="https://github.com/t2ee/core/raw/master/docs/core.png"></a></p>
 [![build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
 # Introduction
