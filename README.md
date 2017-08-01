@@ -22,7 +22,7 @@
 
 This projects aims to be foundation component for the rest of [@t2ee](https://github.com/t2ee) projects. It provides dependency injection and auto configuration functionalities.
 
-For detailed introduction and examples, please visit [t2ee.org/core](http://t2ee.org/core).
+For detailed introduction and examples, please visit [core.t2ee.org](http://core.t2ee.org).
 
 # Installation
 
