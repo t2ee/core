@@ -1,3 +1,4 @@
+![](https://raw.githubusercontent.com/t2ee/core/docs/master/t2ee.png)
 [![build status][travis-image]][travis-url]
 [![Test coverage][coveralls-image]][coveralls-url]
 # Introduction
