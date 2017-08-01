@@ -1,7 +1,7 @@
 {
   "name": "@t2ee/core",
-  "version": "0.1.11",
-  "description": "<p align=\"center\">     <a href=\"http://t2ee.org\">         <img width=\"200\" src=\"https://github.com/t2ee/core/raw/master/docs/t2ee.png\">     </a> </p> <p align=\"center\">     <a href=\"http://core.t2ee.org\">         <img width=\"200\" src=\"https://github.com/t2ee/core/raw/master/docs/core.png\">     </a> </p>",
+  "version": "0.1.12",
+  "description": "@t2ee core library",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
@@ -16,7 +16,6 @@
   "devDependencies": {
     "ava": "^0.21.0",
     "nyc": "^11.1.0",
-    "reflect-metadata": "^0.1.10",
     "source-map-support": "^0.4.15",
     "typescript": "^2.4.2"
   },
@@ -35,6 +34,9 @@
     "js-yaml": "^3.8.3",
     "lodash": "^4.17.4",
     "source-map-support": "^0.4.14"
+  },
+  "peerDependencies": {
+    "reflect-metadata": "^0.1.10"
   },
   "directories": {
     "doc": "docs"

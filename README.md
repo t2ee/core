@@ -24,6 +24,11 @@ This projects aims to be foundation component for the rest of [@t2ee](https://gi
 
 For detailed introduction and examples, please visit [t2ee.org/core](http://t2ee.org/core).
 
+# Installation
+
+`npm i reflect-metadata @t2ee/core -S`
+
+# Example
 
 ```typescript
 @Component({ scope: new SingletonScope() })

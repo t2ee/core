@@ -20,6 +20,10 @@
 
 This projects aims to be foundation component for the rest of [@t2ee](https://github.com/t2ee) projects. It provides dependency injection and auto configuration functionalities.
 
+# Installation
+
+`npm i reflect-metadata @t2ee/core -S`
+
 # Usage
 
 ## Basic Depedency Injection
