@@ -1,6 +1,6 @@
 {
   "name": "@t2ee/core",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "description": "@t2ee core library",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -35,7 +35,7 @@
     "source-map-support": "^0.4.14"
   },
   "peerDependencies": {
-    "typescript": "^2.4.2",
+    "typescript": "2.4.x",
     "reflect-metadata": "^0.1.10"
   },
   "directories": {
