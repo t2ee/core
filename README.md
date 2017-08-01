@@ -1,10 +1,10 @@
 <p align="center">
-    <a href="https://t2ee.org">
+    <a href="http://t2ee.org">
         <img width="200" src="https://github.com/t2ee/core/raw/master/docs/t2ee.png">
     </a>
 </p>
 <p align="center">
-    <a href="https://core.t2ee.org">
+    <a href="http://core.t2ee.org">
         <img width="200" src="https://github.com/t2ee/core/raw/master/docs/core.png">
     </a>
 </p>
