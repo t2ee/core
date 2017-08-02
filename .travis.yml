@@ -2,5 +2,6 @@ language: node_js
 node_js:
     - 6
 sudo: false
-script: npm install typescript reflect-metadata; npm install; npm test
+before_script: npm i typescript reflect-metadata
+script: npm install; npm test
 after_script: npm run coverage && npm install coveralls@2 && cat ./coverage/lcov.info | coveralls
