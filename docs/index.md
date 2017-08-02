@@ -1,9 +1,9 @@
 <div style="display:flex;flex-direction:row;align-items:center;justify-content:center;width:100%;" align="center">
     <a href="http://t2ee.org">
-        <img width="200" src="https://github.com/t2ee/core/raw/master/docs/t2ee.png">
+        <img width="200" src="http://t2ee.org/img/logos/t2ee.png">
     </a>
     <a href="http://core.t2ee.org">
-        <img width="200" src="https://github.com/t2ee/core/raw/master/docs/core.png">
+        <img width="200" src="http://t2ee.org/img/logos/core.png">
     </a>
 </div>
 
