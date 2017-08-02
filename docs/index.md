@@ -1,11 +1,13 @@
-<div style="display:flex;flex-direction:row;align-items:center;justify-content:center;width:100%;" align="center">
+<p align="center">
     <a href="http://t2ee.org">
         <img width="200" src="http://t2ee.org/img/logos/t2ee.png">
     </a>
+</p>
+<p align="center">
     <a href="http://core.t2ee.org">
         <img width="200" src="http://t2ee.org/img/logos/core.png">
     </a>
-</div>
+</p>
 
 <p align="center">
     <a href="https://travis-ci.org/t2ee/core">
