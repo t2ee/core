@@ -10,6 +10,7 @@ class ClassProxy<T extends Object> implements ProxyHandler<T> {
     public constructor(
         private parameters: {[key: string]: {[index: number]: AutoWireMeta[]}},
         private wire: AutoWireMeta,
+        private params: any[],
     ) {
     }
 
@@ -17,12 +18,12 @@ class ClassProxy<T extends Object> implements ProxyHandler<T> {
         if (key in this.parameters) { // this is a function
             const metas: {[index: number]: AutoWireMeta[]} = this.parameters[key];
             const method: Function = target[key];
-            const passInData: any = this.wire.data;
+            const passInData: any = this.params;
 
             return function (...params: any[]): any {
                 for (const index in metas) {
                     for (const wire of metas[index]) {
-                        params[index] = Container.get(wire, params[index], passInData);
+                        params[index] = Container.get(wire, params[index], ...passInData);
                     }
                 }
 
@@ -45,6 +46,7 @@ class Container {
     public static get<T extends Object>(identifierOrWire: AutoWireMeta | ClassConstructor<T> | Symbol | string, defaultValue?: T, ...params: any[]): T {
         let identifier: ClassConstructor<T> | Symbol | string = null;
         let wire: AutoWireMeta = null;
+        params = params || [];
 
         if (~['function', 'symbol', 'string'].indexOf(typeof identifierOrWire)) { // identifier
             identifier = identifierOrWire as any;
@@ -87,15 +89,16 @@ class Container {
         }
 
         let instance: T = defaultValue;
-        params = params || [];
+        const parameters = [];
 
         if (target && target.meta) {
             for (const index in (target.meta.argument || {})) {
                 for (const wire of target.meta.argument[index]) {
-                    params[index] = Container.get(wire, params[index]);
+                    parameters[index] = Container.get(wire, null);
                 }
             }
         }
+        wire.constructorParams = parameters;
 
         if (target && target.meta.scope && target.meta.scope.length) {
             for (const scope of (target.meta.scope || [])) {
@@ -116,7 +119,7 @@ class Container {
                     instance[key] = Container.get(wire, instance[key], ...params);
                 }
             }
-            return new Proxy<T>(instance, new ClassProxy<T>(target.meta.parameter, wire));
+            return new Proxy<T>(instance, new ClassProxy<T>(target.meta.parameter, wire, params));
         } else {
             return instance;
         }

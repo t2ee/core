@@ -5,7 +5,7 @@ export class DefaultProvider implements Provider {
     // tslint:disable-next-line
     public resolve<T>(value: T, meta: AutoWireMeta, args: any[]): T {
         if (typeof meta.type === 'function') {
-            return new meta.type(...args);
+            return new meta.type(...(meta.constructorParams || []));
         }
 
         return value;
