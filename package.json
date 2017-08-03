@@ -1,6 +1,6 @@
 {
   "name": "@t2ee/core",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "description": "@t2ee core library",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

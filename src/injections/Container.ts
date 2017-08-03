@@ -35,7 +35,6 @@ class ClassProxy<T extends Object> implements ProxyHandler<T> {
         let value = target[key];
 
         if ((key in this.properties)) {
-            this.properties[key]
             for (const meta of this.properties[key]) {
                 if (!meta.inited) {
                     value = Container.get(meta, value, ...passInData);
@@ -43,7 +42,7 @@ class ClassProxy<T extends Object> implements ProxyHandler<T> {
                 }
             }
         }
-
+        target[key] = value;
         return value;
     }
 }
