@@ -5,6 +5,7 @@ interface AutoWireMeta {
     declaredType: ClassConstructor<any>;
     data?: any;
     constructorParams?: any[];
+    inited?: boolean;
 }
 
 export default AutoWireMeta;

@@ -9,16 +9,17 @@ class ClassProxy<T extends Object> implements ProxyHandler<T> {
 
     public constructor(
         private parameters: {[key: string]: {[index: number]: AutoWireMeta[]}},
+        private properties: {[key: string]:  AutoWireMeta[]},
         private wire: AutoWireMeta,
         private params: any[],
     ) {
     }
 
     public get(target: T, key: PropertyKey, receiver: any): any {
+        const passInData: any = this.params;
         if (key in this.parameters) { // this is a function
             const metas: {[index: number]: AutoWireMeta[]} = this.parameters[key];
             const method: Function = target[key];
-            const passInData: any = this.params;
 
             return function (...params: any[]): any {
                 for (const index in metas) {
@@ -31,7 +32,19 @@ class ClassProxy<T extends Object> implements ProxyHandler<T> {
             };
         }
 
-        return target[key];
+        let value = target[key];
+
+        if ((key in this.properties)) {
+            this.properties[key]
+            for (const meta of this.properties[key]) {
+                if (!meta.inited) {
+                    value = Container.get(meta, value, ...passInData);
+                    meta.inited = true;
+                }
+            }
+        }
+
+        return value;
     }
 }
 
@@ -116,10 +129,10 @@ class Container {
         if (target && target.meta.property) {
             for (const key in (target.meta.property || {})) {
                 for (const wire of target.meta.property[key]) {
-                    instance[key] = Container.get(wire, instance[key], ...params);
+                    //instance[key] = Container.get(wire, instance[key], ...params);
                 }
             }
-            return new Proxy<T>(instance, new ClassProxy<T>(target.meta.parameter, wire, params));
+            return new Proxy<T>(instance, new ClassProxy<T>(target.meta.parameter, target.meta.property, wire, params));
         } else {
             return instance;
         }

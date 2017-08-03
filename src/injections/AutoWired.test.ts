@@ -3,7 +3,9 @@ import AutoWired from './AutoWired';
 import test from 'ava';
 import Container from '../injections/Container';
 
-class A {}
+class A {
+    message?: string;
+}
 
 class Test {
     @AutoWired a: String;
@@ -16,7 +18,7 @@ class Test {
     }
 }
 
-test('@Value', t => {
+test('@AutoWired', t => {
     const meta = Container.extractMeta(Test);
     t.deepEqual(meta, {
         argument: {
