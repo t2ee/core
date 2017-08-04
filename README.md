@@ -1,11 +1,11 @@
 <p align="center">
-    <a href="http://t2ee.org">
-        <img width="200" src="http://t2ee.org/img/logos/t2ee.png">
+    <a href="//t2ee.org">
+        <img width="200" src="//t2ee.org/img/logos/t2ee.png">
     </a>
 </p>
 <p align="center">
-    <a href="http://core.t2ee.org">
-        <img width="200" src="http://t2ee.org/img/logos/core.png">
+    <a href="//core.t2ee.org">
+        <img width="200" src="//t2ee.org/img/logos/core.png">
     </a>
 </p>
 
@@ -22,7 +22,7 @@
 
 This projects aims to be foundation component for the rest of [@t2ee](https://github.com/t2ee) projects. It provides dependency injection and auto configuration functionalities.
 
-For detailed introduction and examples, please visit [core.t2ee.org](http://core.t2ee.org).
+For detailed introduction and examples, please visit [core.t2ee.org](//core.t2ee.org).
 
 # Installation
 
