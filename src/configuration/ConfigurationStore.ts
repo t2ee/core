@@ -46,7 +46,7 @@ export default class ConfigurationStore {
     public static get(key: string, id?: string, required: boolean = false): any {
         if (id) {
             const obj: any = ConfigurationStore.store.get(id);
-            if (!obj) {
+            if (!obj && required) {
                 throw new Error(`Configuration '${id}' is not laoded`);
             }
 

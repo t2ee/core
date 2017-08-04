@@ -6,6 +6,7 @@ export class ConfigurationProvider implements Provider {
     // tslint:disable-next-line
     public resolve<T>(value: T, meta: AutoWireMeta , args: any[]): T {
         let val: any = ConfigurationStore.get(meta.data[0], meta.data[1], meta.data[2]);
+        if (val === null || val === undefined) return null;
         if (meta.declaredType === Number) {
             val = parseFloat(val);
         } else if (meta.declaredType === Boolean) {
