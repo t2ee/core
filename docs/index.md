@@ -148,7 +148,7 @@ function Process(name: string) {
 ```typescript
 class MyProvider implements Provider {
     resolve<T extends Object>(value: T, meta: AutoWireMeta, args: any[]) {
-        if (type === 'process-information') {
+        if (meta.type === 'process-information') {
             const { name } = meta.data;
             return process.env[name];
         }
