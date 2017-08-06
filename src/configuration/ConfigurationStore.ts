@@ -91,8 +91,12 @@ export default class ConfigurationStore {
             }
         } else if (value.split('.')[0] in ConfigurationStore.types) { // simple object
             const values: string[] = value.split('.');
-            const rest: string = values.slice(1).join('.');
-            value = _.get(ConfigurationStore.types[values[0]], rest);
+            if (values.length === 1) {
+                value = ConfigurationStore.types[values[0]];
+            } else {
+                const rest: string = values.slice(1).join('.');
+                value = _.get(ConfigurationStore.types[values[0]], rest);
+            }
         }
         return value;
     }
