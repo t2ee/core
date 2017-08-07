@@ -10,6 +10,9 @@
 </p>
 
 <p align="center">
+    <a href="https://www.npmjs.com/package/@t2ee/core">
+        <img src="https://badge.fury.io/js/%40t2ee%2Fcore.svg">
+    </a>
     <a href="https://travis-ci.org/t2ee/core">
         <img src="https://img.shields.io/travis/t2ee/core/master.svg?style=flat-square">
     </a>
