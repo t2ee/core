@@ -3,6 +3,37 @@ import Metadata from '../utils/Metadata';
 import ComponentMeta from './ComponentMeta';
 import Provider from './Provider';
 
+class MetaResolver {
+    private providers = new Map<string | Symbol, Provider>();
+    private args: any[] = [];
+    constructor(...args: any[]) {
+        this.args = args;
+    }
+
+    public updateArgs(...args: any[]) {
+        this.args = args;
+    }
+
+    public resolve(value: any, metas: AutoWireMeta[]): any {
+        for (const meta of metas) {
+            let provider: Provider = this.providers.get(meta.provider);
+            if (!provider) {
+                const providerClass = Container['provider'].get(meta.provider);
+                if (providerClass) {
+                    provider = new providerClass(...this.args);
+                    this.providers.set(meta.provider, provider);
+                }
+            }
+            if (provider) {
+                value = provider.resolve(value, meta.type, meta.declaredType, meta.data);
+            } else {
+                value = Container.get(meta.type);
+            }
+        }
+        return value;
+    }
+}
+
 class ClassProxy<T extends Object> implements ProxyHandler<T> {
     constructor(
         private parameters: {[key: string]: {[index: number]: AutoWireMeta[]}},
@@ -16,8 +47,9 @@ class ClassProxy<T extends Object> implements ProxyHandler<T> {
             const method: Function = target[key];
 
             return function (...params: any[]): any {
+                const resolver = new MetaResolver(...params);
                 for (const index in metas) {
-                    params[index] = Container.resolve(params[index], metas[index]);
+                    params[index] = resolver.resolve(params[index], metas[index]);
                 }
 
                 return method.apply(this, params);
@@ -31,9 +63,9 @@ class ClassProxy<T extends Object> implements ProxyHandler<T> {
 export default class Container {
     private static injected = new Map<(new (...args: any[]) => any) | Symbol | string, any>();
     private static providedMeta = new Map<new (...args: any[]) => any, ComponentMeta>();
-    private static provider = new Map<Symbol | string, Provider>();
+    private static provider = new Map<Symbol | string,  new (...args) => Provider>();
 
-    public static get<T>(target: (new (...args: any[]) => T) | Symbol | string, ...data: any[]): T {
+    public static get<T extends Object>(target: (new (...args: any[]) => T) | Symbol | string, ...data: any[]): T {
         let instance: T = null;
         instance = Container.injected.get(target);
         if (instance) {
@@ -44,46 +76,36 @@ export default class Container {
             return null;
         }
 
-
-        const meta = Container.providedMeta.get(target);
-        if (!meta) {
+        const classMeta = Container.providedMeta.get(target);
+        if (!classMeta) {
             return null;
         }
 
         const args = data;
+        const resolver = new MetaResolver(...args);
 
-        for (const index in meta.argument) {
-            const metas = meta.argument[index];
-            args[index] = Container.resolve(args[index], metas);
+        for (const index in classMeta.argument) {
+            const metas = classMeta.argument[index];
+            args[index] = resolver.resolve(args[index], metas);
         }
+        resolver.updateArgs(args);
 
         instance = new target(...args);
-        const provider = Container.provider.get(meta.provider);
+        const providerClass = Container.provider.get(classMeta.provider);
+        const provider = providerClass && new providerClass(...data);
         if (provider) {
             instance = provider.resolve(instance, target, target, args);
         }
 
-        for (const key in meta.property) {
-            // ignore method
-            if (meta.property[key][0] && meta.property[key][0].declaredType === Function) {
+        for (const key in classMeta.property) {
+            // ignore method property
+            if (classMeta.property[key][0] && classMeta.property[key][0].declaredType === Function) {
                 continue;
             }
-            instance[key] = Container.resolve(instance[key], meta.property[key]);
+            instance[key] = resolver.resolve(instance[key], classMeta.property[key]);
         }
 
-        return instance;
-    }
-
-    public static resolve(value: any, metas: AutoWireMeta[]): any {
-        for (const meta of metas) {
-            const provider = Container.provider.get(meta.provider);
-            if (provider) {
-                value = provider.resolve(value, meta.type, meta.declaredType, meta.data);
-            } else {
-                value = Container.get(meta.type);
-            }
-        }
-        return value;
+        return new Proxy(instance, new ClassProxy<T>(classMeta.parameter, classMeta.property));
     }
 
     public static provide(target: any, provider?: Symbol | string) {
@@ -112,7 +134,7 @@ export default class Container {
         Container.injected.set(type, value);
     }
 
-    public static register(name: Symbol | string, provider: Provider) {
+    public static register(name: Symbol | string, provider: new (...args) => Provider) {
         if (!name || !provider) {
             return;
         }

@@ -24,5 +24,4 @@ export class ConfigurationProvider implements Provider {
     }
 }
 
-const configurationProvider: ConfigurationProvider = new ConfigurationProvider();
-export default configurationProvider;
+export default ConfigurationProvider;

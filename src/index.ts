@@ -1,23 +1,30 @@
 import 'source-map-support/register';
 
 import Component from './injections/Component';
+import Singleton from './injections/Singleton';
 import AutoWired from './injections/AutoWired';
 import Container from './injections/Container';
-import Bean from './configuration/Bean';
-import Configuration from './configuration/Configuration';
-import EnableConfiguration from './configuration/EnableConfiguration';
-import ConfigurationProvider from './configuration/ConfigurationProvider';
-import Value from './configuration/Value';
 
 import Provider from './injections/Provider';
 import AutoWireMeta from './injections/AutoWireMeta';
 
+import Bean from './configuration/Bean';
+import Configuration from './configuration/Configuration';
+
+import EnableConfiguration from './configuration/EnableConfiguration';
+import ConfigurationProvider from './configuration/ConfigurationProvider';
+import Value from './configuration/Value';
+import ConfigurationStore from './configuration/ConfigurationStore';
+
+import Metadata from './utils/Metadata';
+
 Container.register(Symbol.for('t2ee:core:value'), ConfigurationProvider);
 
 export {
-    Container,
-    AutoWired,
     Component,
+    Singleton,
+    AutoWired,
+    Container,
 
     Provider,
     AutoWireMeta,
@@ -27,4 +34,8 @@ export {
 
     EnableConfiguration,
     Value,
+    ConfigurationStore,
+    ConfigurationProvider,
+
+    Metadata,
 }
