@@ -1,11 +1,10 @@
-import ClassConstructor from '../ClassConstructor';
 
 interface AutoWireMeta {
-    type: ClassConstructor<any> | Symbol | string;
-    declaredType: ClassConstructor<any>;
+    type:  (new (...args: any[]) => any) | Symbol | string;
+    declaredType:  new (...args: any[]) => any;
+    functionType?: new (...args: any[]) => any;
     data?: any;
-    constructorParams?: any[];
-    inited?: boolean;
+    provider?: Symbol | string;
 }
 
-export default AutoWireMeta;
+export default AutoWireMeta

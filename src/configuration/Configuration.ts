@@ -1,24 +1,19 @@
 import Metadata from '../utils/Metadata';
-import ClassConstructor from '../ClassConstructor';
-import BeanProvider from './BeanProvider';
 import Container from '../injections/Container';
-import Component from '../injections/Component';
-
 
 function Configuration(target: any): any {
-    const beans: {[key: string]: ClassConstructor<any>} = Metadata.get('t2ee:core:beans', target.prototype) || {};
-    Component(target);
-    const instance: any = Container.get(target);
-
-    for (const key in beans) {
-        const item: any = instance[key]();
-        BeanProvider.provide(beans[key], item);
-        BeanProvider.provide(<any> key, item);
-        Container.inject(key, BeanProvider);
-        Container.inject(beans[key], BeanProvider);
+    Container.provide(target);
+    const instance = Container.get(target);
+    const property  = Container.getMeta(target).property;
+    for (const key in property) {
+        const meta = property[key].find(meta => meta.provider === Symbol.for('t2ee:core:bean-provider'));
+        if (meta) {
+            const value = instance[key]();
+            Container.inject(meta.type, value)
+            Container.inject(meta.functionType, value)
+            Container.inject(key, value)
+        }
     }
-
-    return target;
 }
 
 export default Configuration;

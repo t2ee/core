@@ -1,4 +1,0 @@
-server:
-    port: 102
-enum: E.A
-random: return(E.B)

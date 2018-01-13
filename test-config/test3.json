@@ -1,7 +1,0 @@
-{
-    "server": {
-        "port": 103
-    },
-    "enum": "E.C",
-    "random": "return(103)"
-}

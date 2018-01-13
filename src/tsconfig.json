@@ -10,7 +10,7 @@
     },
     "compileOnSave": false,
     "include": [
-        "./**/*.ts"
+        "./index.ts"
     ],
     "exclude": [
         "./**/*.test.ts"
