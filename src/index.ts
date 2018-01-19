@@ -8,8 +8,8 @@ import Container from './injections/Container';
 import Provider from './injections/Provider';
 import AutoWireMeta from './injections/AutoWireMeta';
 
-import Bean from './configuration/Bean';
-import Configuration from './configuration/Configuration';
+import Bean from './injections/Bean';
+import Configuration from './injections/Configuration';
 
 import EnableConfiguration from './configuration/EnableConfiguration';
 import ConfigurationProvider from './configuration/ConfigurationProvider';

@@ -1,5 +1,5 @@
 import Metadata from '../utils/Metadata';
-import Container from '../injections/Container';
+import Container from './Container';
 
 function Configuration(target: any): any {
     Container.provide(target);

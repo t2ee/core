@@ -1,4 +1,4 @@
-import AutoWired from '../injections/AutoWired';
+import AutoWired from './AutoWired';
 
 export default function Bean(name?: string) {
     return (target: any, key: string, descriptor: TypedPropertyDescriptor<any>) => {
