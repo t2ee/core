@@ -24,6 +24,7 @@ class MetaResolver {
                     this.providers.set(meta.provider, provider);
                 }
             }
+
             if (provider) {
                 value = provider.resolve(value, meta.type, meta.declaredType, meta.data);
             } else {
@@ -52,7 +53,7 @@ class ClassProxy<T extends Object> implements ProxyHandler<T> {
                     params[index] = resolver.resolve(params[index], metas[index]);
                 }
 
-                return method.apply(this, params);
+                return method.apply(target, params);
             };
         }
 
@@ -102,6 +103,7 @@ export default class Container {
             if (classMeta.property[key][0] && classMeta.property[key][0].declaredType === Function) {
                 continue;
             }
+
             instance[key] = resolver.resolve(instance[key], classMeta.property[key]);
         }
 
