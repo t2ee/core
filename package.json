@@ -1,5 +1,5 @@
 {
-  "name": "@t2ee/core",
+  "name": "@flw/core",
   "version": "1.0.0",
   "description": "@t2ee core library",
   "main": "dist/index.js",
