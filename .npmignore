@@ -1,3 +1,4 @@
 src/
 test-dist/
 src/**/*.test.ts
+node_modules/
