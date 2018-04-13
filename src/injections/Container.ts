@@ -2,6 +2,7 @@ import AutoWireMeta from './AutoWireMeta';
 import Metadata from '../utils/Metadata';
 import ComponentMeta from './ComponentMeta';
 import Provider from './Provider';
+import Hashable from '../utils/Hashable';
 
 class MetaResolver {
     private providers = new Map<string | Symbol, Provider>();
@@ -35,7 +36,7 @@ class MetaResolver {
     }
 }
 
-class ClassProxy<T extends Object> implements ProxyHandler<T> {
+class ClassProxy<T extends Hashable> implements ProxyHandler<T> {
     constructor(
         private parameters: {[key: string]: {[index: number]: AutoWireMeta[]}},
         private properties: {[key: string]:  AutoWireMeta[]}
@@ -64,9 +65,9 @@ class ClassProxy<T extends Object> implements ProxyHandler<T> {
 export default class Container {
     private static injected = new Map<(new (...args: any[]) => any) | Symbol | string, any>();
     private static providedMeta = new Map<new (...args: any[]) => any, ComponentMeta>();
-    private static provider = new Map<Symbol | string,  new (...args) => Provider>();
+    private static provider = new Map<Symbol | string,  new (...args: any[]) => Provider>();
 
-    public static get<T extends Object>(target: (new (...args: any[]) => T) | Symbol | string, ...data: any[]): T {
+    public static get<T extends Hashable>(target: (new (...args: any[]) => T) | Symbol | string, ...data: any[]): T {
         let instance: T = null;
         instance = Container.injected.get(target);
         if (instance) {
@@ -136,7 +137,7 @@ export default class Container {
         Container.injected.set(type, value);
     }
 
-    public static register(name: Symbol | string, provider: new (...args) => Provider) {
+    public static register(name: Symbol | string, provider: new (...args: any[]) => Provider) {
         if (!name || !provider) {
             return;
         }

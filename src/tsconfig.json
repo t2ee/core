@@ -5,12 +5,13 @@
         "target": "ES6",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
+        "noImplicitAny": true,
 		"declaration": true,
         "sourceMap": true
     },
     "compileOnSave": false,
     "include": [
-        "./index.ts"
+        "index.ts"
     ],
     "exclude": [
         "./**/*.test.ts"

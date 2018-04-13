@@ -1,6 +1,6 @@
 {
   "name": "@flw/core",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "description": "@t2ee core library",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
